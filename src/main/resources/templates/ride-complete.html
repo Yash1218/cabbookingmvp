@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ride Summary</title>
+</head>
+<body>
+
+<h2>Ride Completed!</h2>
+
+<p><b>Distance:</b> <span th:text="${distance}"></span> km</p>
+<p><b>Total Fare:</b> ₹<span th:text="${fare}"></span></p>
+<p><b>Driver:</b> <span th:text="${driver}"></span></p>
+
+<a href="/home">Book Another Ride</a>
+
+</body>
+</html>

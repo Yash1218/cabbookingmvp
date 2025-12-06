@@ -45,6 +45,12 @@
     <h4>Nearby Suggestions</h4>
     <p>Food | Tourism | Shopping</p>
 </div>
+<form action="/finishRide" method="post">
+    <input type="hidden" name="pickup" th:value="${pickup}">
+    <input type="hidden" name="drop" th:value="${drop}">
+    <input type="hidden" name="vehicle" th:value="${vehicle}">
+    <button type="submit">Finish Ride</button>
+</form>
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

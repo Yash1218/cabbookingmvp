@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Rides</title>
+</head>
+<body>
+
+<h2>My Rides</h2>
+
+<table border="1" cellpadding="8" cellspacing="0">
+    <tr>
+        <th>Pickup</th>
+        <th>Drop</th>
+        <th>Distance (km)</th>
+        <th>Fare (₹)</th>
+        <th>Driver</th>
+        <th>Date & Time</th>
+    </tr>
+
+    <tr th:each="r : ${rides}">
+        <td th:text="${r.pickup}"></td>
+        <td th:text="${r.dropLocation}"></td>
+        <td th:text="${r.distance}"></td>
+        <td th:text="${r.fare}"></td>
+        <td th:text="${r.driverName}"></td>
+        <td th:text="${r.time}"></td>
+    </tr>
+</table>
+
+<br>
+<a href="/home">Back to Home</a>
+
+</body>
+</html>

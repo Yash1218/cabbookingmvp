@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Driver Assigned</title>
+</head>
+<body>
+
+<h2>Driver Found!</h2>
+
+<p><b>Name:</b> <span th:text="${driverName}"></span></p>
+<p><b>Vehicle:</b> <span th:text="${vehicleModel}"></span></p>
+<p><b>Number:</b> <span th:text="${vehicleNumber}"></span></p>
+<p><b>Rating:</b> <span th:text="${rating}"></span> ⭐</p>
+
+<form action="/startRide" method="get">
+    <input type="hidden" name="pickup" th:value="${pickup}">
+    <input type="hidden" name="drop" th:value="${drop}">
+    <input type="hidden" name="vehicle" th:value="${vehicle}">
+    <button type="submit">Start Ride</button>
+</form>
+
+
+
+</body>
+</html>
