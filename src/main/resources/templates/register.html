@@ -1,21 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Register</title>
+    <meta charset="UTF-8">
+    <title>Register – RideFlow</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Inter", sans-serif;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #1F2A37;
+        }
+
+        .container {
+            width: 380px;
+            background: #ffffff;
+            padding: 40px 35px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 8px;
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        .subtext {
+            color: #6B7280;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid #E5E7EB;
+            background: #F5F7FA;
+            font-size: 15px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #10B8C7;
+            box-shadow: 0 0 4px rgba(16, 184, 199, 0.4);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            transition: 0.2s;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .error {
+            color: #d9534f;
+            margin-top: 10px;
+        }
+
+        a {
+            color: #0FA6D8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 18px;
+            font-size: 14px;
+            color: #6B7280;
+        }
+    </style>
 </head>
+
 <body>
-<h2>Register</h2>
 
-<form action="/register" method="post">
-    <input type="text" name="name" placeholder="Name" required><br><br>
-    <input type="email" name="email" placeholder="Email" required><br><br>
-    <input type="password" name="password" placeholder="Password" required><br><br>
-    <button type="submit">Register</button>
-</form>
+<div class="container">
+    <h2>Create Account</h2>
+    <p class="subtext">Join RideFlow and start your journey 🚖</p>
 
-<p th:if="${error}" th:text="${error}"></p>
+    <form action="/register" method="post">
+        <input type="text" name="name" placeholder="Full Name" required>
+        <input type="email" name="email" placeholder="Email Address" required>
+        <input type="password" name="password" placeholder="Create Password" required>
 
-<a href="/">Back to Log in</a>
+        <button type="submit">Register</button>
+    </form>
+
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+
+    <p class="footer">
+        Already have an account?
+        <a href="/">Sign in</a>
+    </p>
+</div>
 
 </body>
 </html>

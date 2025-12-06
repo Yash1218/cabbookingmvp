@@ -1,21 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Book a Ride</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Inter", sans-serif;
+            background: #F8FAFC;
+            color: #1F2A37;
+        }
+
+        /* ---------------- Header Gradient ---------------- */
+        .header {
+            width: 100%;
+            padding: 40px 60px;
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            color: white;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        /* ---------------- Ride Card ---------------- */
+        .card {
+            width: 60%;
+            background: white;
+            margin: -40px auto 20px;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        .card h2 {
+            margin-bottom: 18px;
+            font-size: 22px;
+        }
+
+        /* ---------------- Input Styles ---------------- */
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #E5E7EB;
+            background: #F5F7FA;
+            font-size: 15px;
+            margin-bottom: 18px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #10B8C7;
+            box-shadow: 0 0 4px rgba(16, 184, 199, 0.4);
+        }
+
+        /* ---------------- Button ---------------- */
+        button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            font-size: 17px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            transition: 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.92;
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>Book Your Ride</h2>
+<!-- --------- HEADER SECTION (Teal Gradient) --------- -->
+<div class="header">
+    <h1>Where to?</h1>
+</div>
 
-<form action="/ride" method="post">
-    <label>Pickup Location:</label><br>
-    <input type="text" name="pickup" placeholder="Enter pickup location" required><br><br>
+<!-- --------- MAIN CARD --------- -->
+<div class="card">
+    <h2>Book Your Ride</h2>
 
-    <label>Drop Location:</label><br>
-    <input type="text" name="drop" placeholder="Enter drop location" required><br><br>
+    <form action="/ride" method="post">
 
-    <button type="submit">Book Ride</button>
-</form>
+        <input type="text" name="pickup" placeholder="Enter pickup location" required>
+
+        <input type="text" name="drop" placeholder="Enter drop location" required>
+
+        <button type="submit">Book Ride</button>
+    </form>
+</div>
 
 </body>
 </html>
