@@ -3,6 +3,7 @@ package com.example.cabbookingmvp.controller;
 import com.example.cabbookingmvp.entity.Ride;
 import com.example.cabbookingmvp.repository.RideRepository;
 import com.example.cabbookingmvp.repository.DriverRepository;
+import com.example.cabbookingmvp.repository.UserRepository;
 import com.example.cabbookingmvp.service.RideService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 import com.example.cabbookingmvp.service.GeoService;
+
+import javax.servlet.http.HttpSession;
 
 
 @Controller
@@ -29,6 +32,24 @@ public class BookingController {
 
     @Autowired
     private GeoService geoService;
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping("/home")
+    public String homePage(HttpSession session, Model model) {
+
+        String email = (String) session.getAttribute("email");
+
+        if (email != null) {
+            var user = userRepository.findByEmail(email);
+            if (user != null) {
+                model.addAttribute("username", user.getName());
+            }
+        }
+
+        return "home";
+    }
+
 
     // STEP 1 — Process Booking Form (Home Page)
     @PostMapping("/processBooking")
@@ -73,11 +94,13 @@ public class BookingController {
     public String startRide(@RequestParam String pickup,
                             @RequestParam String drop,
                             @RequestParam String vehicle,
+                            @RequestParam String driver,
                             Model model) {
 
         model.addAttribute("pickup", pickup);
         model.addAttribute("drop", drop);
         model.addAttribute("vehicle", vehicle);
+        model.addAttribute("driver", driver);
 
         return "ride";
     }
@@ -88,6 +111,7 @@ public class BookingController {
     public String finishRide(@RequestParam String pickup,
                              @RequestParam String drop,
                              @RequestParam String vehicle,
+                             @RequestParam String driver,
                              Model model) {
 
         double[] start = geoService.getCoordinates(pickup);
@@ -111,7 +135,7 @@ public class BookingController {
         ride.setDistance(distance);
         ride.setFare(fare);
         ride.setVehicle(vehicle);
-        ride.setDriverName("Assigned Driver");
+        ride.setDriverName(driver);
         ride.setTime(LocalDateTime.now());
 
         rideRepository.save(ride);
@@ -121,6 +145,8 @@ public class BookingController {
         model.addAttribute("distance", String.format("%.2f", distance));
         model.addAttribute("fare", String.format("%.2f", fare));
         model.addAttribute("vehicle", vehicle);
+        model.addAttribute("driver",driver);
+
 
         return "ride-complete";
     }

@@ -1,28 +1,283 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Book a Ride</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h2>Book Your Ride</h2>-->
+
+<!--<form action="/processBooking" method="post">-->
+<!--    <label>Pickup Location:</label><br>-->
+<!--    <input type="text" name="pickup" required><br><br>-->
+
+<!--    <label>Drop Location:</label><br>-->
+<!--    <input type="text" name="drop" required><br><br>-->
+
+<!--    <label>Select Vehicle:</label><br>-->
+<!--    <input type="radio" name="vehicle" value="Auto" required> Auto (₹8/km)<br>-->
+<!--    <input type="radio" name="vehicle" value="Mini"> Mini (₹10/km)<br>-->
+<!--    <input type="radio" name="vehicle" value="Sedan"> Sedan (₹14/km)<br>-->
+<!--    <input type="radio" name="vehicle" value="SUV"> SUV (₹18/km)<br><br>-->
+
+<!--    <button type="submit">Book Ride</button>-->
+<!--</form>-->
+<!--<a href="/my-rides">My Rides</a>-->
+
+<!--</body>-->
+<!--</html>-->
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Book a Ride</title>
+    <meta charset="UTF-8">
+    <title>RideFlow – Book a Ride</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Inter", sans-serif;
+            background: #F8FAFC;
+            color: #1F2A37;
+        }
+
+        /* ---------------- Header Gradient ---------------- */
+        .header {
+            width: 100%;
+            padding: 40px 60px;
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            color: white;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        .header .greeting {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .header .username {
+            font-size: 26px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* ---------------- Main Card ---------------- */
+        .card {
+            width: 65%;
+            background: white;
+            margin: -35px auto 20px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        .card h2 {
+            margin-bottom: 18px;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        /* ---------------- Input Styles ---------------- */
+        label {
+            font-size: 15px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #E5E7EB;
+            background: #F5F7FA;
+            font-size: 15px;
+            margin-bottom: 18px;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: #10B8C7;
+            box-shadow: 0 0 4px rgba(16, 184, 199, 0.4);
+        }
+
+        /* ---------------- Radio Buttons ---------------- */
+        .vehicle-options {
+            margin: 12px 0 18px;
+            line-height: 1.9rem;
+        }
+
+        /* ---------------- Button ---------------- */
+        button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            font-size: 17px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            transition: 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.92;
+        }
+
+        /* ---------------- My Rides Link ---------------- */
+        .rides-link {
+            display: block;
+            text-align: center;
+            margin-top: 16px;
+            font-size: 15px;
+            color: #0FA6D8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .rides-link:hover {
+            text-decoration: underline;
+        }
+        .vehicle-container {
+    display: flex;
+    gap: 16px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.vehicle-card {
+    width: 180px;
+    padding: 16px;
+    border-radius: 14px;
+    border: 2px solid #E5E7EB;
+    background: #FFFFFF;
+    cursor: pointer;
+    transition: 0.25s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
+.vehicle-card:hover {
+    border-color: #10B8C7;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
+
+.vehicle-card.selected {
+    border-color: #0FA6D8;
+    background: #EBF8FF;
+}
+
+.vehicle-card img {
+    width: 38px;
+}
+
+.vehicle-label {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.vehicle-price {
+    font-size: 14px;
+    color: #6B7280;
+}
+
+/* Hide default radio buttons */
+.vehicle-radio {
+    display: none;
+}
+
+
+    </style>
 </head>
+
 <body>
 
-<h2>Book Your Ride</h2>
+<!-- --------- HEADER SECTION --------- -->
+<div class="header">
+    <div class="greeting">Good morning</div>
+    <div class="username" th:text="${username} ?: 'User'"></div>
+</div>
 
-<form action="/processBooking" method="post">
-    <label>Pickup Location:</label><br>
-    <input type="text" name="pickup" required><br><br>
+<!-- --------- MAIN CARD --------- -->
+<div class="card">
+    <h2>Where to?</h2>
 
-    <label>Drop Location:</label><br>
-    <input type="text" name="drop" required><br><br>
+    <form action="/processBooking" method="post">
 
-    <label>Select Vehicle:</label><br>
-    <input type="radio" name="vehicle" value="Auto" required> Auto (₹8/km)<br>
-    <input type="radio" name="vehicle" value="Mini"> Mini (₹10/km)<br>
-    <input type="radio" name="vehicle" value="Sedan"> Sedan (₹14/km)<br>
-    <input type="radio" name="vehicle" value="SUV"> SUV (₹18/km)<br><br>
+        <label>Pickup Location:</label>
+        <input type="text" name="pickup" placeholder="Enter pickup location" required>
 
-    <button type="submit">Book Ride</button>
-</form>
-<a href="/my-rides">My Rides</a>
+        <label>Drop Location:</label>
+        <input type="text" name="drop" placeholder="Enter drop location" required>
+
+        <label>Select Vehicle:</label>
+
+        <div class="vehicle-container">
+
+            <!-- AUTO -->
+            <label class="vehicle-card" onclick="selectVehicle('Auto')">
+                <input type="radio" class="vehicle-radio" name="vehicle" value="Auto" required id="Auto">
+                <img src="https://cdn-icons-png.flaticon.com/128/706/706236.png">
+                <div>
+                    <div class="vehicle-label">Auto</div>
+                    <div class="vehicle-price">₹8/km</div>
+                </div>
+            </label>
+
+            <!-- MINI -->
+            <label class="vehicle-card" onclick="selectVehicle('Mini')">
+                <input type="radio" class="vehicle-radio" name="vehicle" value="Mini" id="Mini">
+                <img src="https://cdn-icons-png.flaticon.com/512/741/741407.png">
+                <div>
+                    <div class="vehicle-label">Mini</div>
+                    <div class="vehicle-price">₹10/km</div>
+                </div>
+            </label>
+
+            <!-- SEDAN -->
+            <label class="vehicle-card" onclick="selectVehicle('Sedan')">
+                <input type="radio" class="vehicle-radio" name="vehicle" value="Sedan" id="Sedan">
+                <img src="https://cdn-icons-png.flaticon.com/128/14703/14703755.png">
+                <div>
+                    <div class="vehicle-label">Sedan</div>
+                    <div class="vehicle-price">₹14/km</div>
+                </div>
+            </label>
+
+            <!-- SUV -->
+            <label class="vehicle-card" onclick="selectVehicle('SUV')">
+                <input type="radio" class="vehicle-radio" name="vehicle" value="SUV" id="SUV">
+                <img src="https://cdn-icons-png.flaticon.com/128/6141/6141605.png">
+                <div>
+                    <div class="vehicle-label">SUV</div>
+                    <div class="vehicle-price">₹18/km</div>
+                </div>
+            </label>
+
+        </div>
+
+
+        <button type="submit">Book Ride</button>
+    </form>
+
+    <a href="/my-rides" class="rides-link">My Rides</a>
+</div>
+<script>
+    function selectVehicle(type) {
+        document.getElementById(type).checked = true;
+
+        // remove selection highlight
+        document.querySelectorAll('.vehicle-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+
+        // highlight selected card
+        event.currentTarget.classList.add('selected');
+    }
+</script>
 
 </body>
 </html>

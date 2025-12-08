@@ -1,41 +1,180 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Finding Driver</title>-->
+<!--    <style>-->
+<!--        .loader {-->
+<!--            border: 8px solid #f3f3f3;-->
+<!--            border-top: 8px solid #3498db;-->
+<!--            border-radius: 50%;-->
+<!--            width: 70px;-->
+<!--            height: 70px;-->
+<!--            animation: spin 1s linear infinite;-->
+<!--            margin: auto;-->
+<!--            margin-top: 120px;-->
+<!--        }-->
+
+<!--        @keyframes spin {-->
+<!--            0% { transform: rotate(0deg); }-->
+<!--            100% { transform: rotate(360deg); }-->
+<!--        }-->
+
+<!--        h2 {-->
+<!--            text-align: center;-->
+<!--            margin-top: 20px;-->
+<!--            font-family: Arial;-->
+<!--        }-->
+<!--    </style>-->
+
+<!--    <script>-->
+<!--        setTimeout(function() {-->
+<!--window.location.href = "/driver-assigned?pickup=[[${pickup}]]&drop=[[${drop}]]&vehicle=[[${vehicle}]]";-->
+<!-- }, 3000);-->
+
+<!--    </script>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="loader"></div>-->
+<!--<h2>Looking for nearby drivers...</h2>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Finding Driver</title>
+
     <style>
-        .loader {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Inter", sans-serif;
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Animated Ripple Circle */
+        .ripple {
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            width: 70px;
-            height: 70px;
-            animation: spin 1s linear infinite;
-            margin: auto;
-            margin-top: 120px;
+            border: 4px solid rgba(255,255,255,0.6);
+            position: absolute;
+            animation: ripple 2s infinite ease-out;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .ripple:nth-child(2) {
+            animation-delay: 0.4s;
         }
 
+        .ripple:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0.3);
+                opacity: 0.9;
+            }
+            100% {
+                transform: scale(2.8);
+                opacity: 0;
+            }
+        }
+
+
+
+        /* Searching text */
         h2 {
-            text-align: center;
-            margin-top: 20px;
-            font-family: Arial;
+            margin-top: 180px;
+            font-size: 26px;
+            font-weight: 600;
+            animation: fadeIn 1.2s infinite alternate;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0.5; }
+            to { opacity: 1; }
+        }
+        /* Semi-circle vehicle rotation */
+.vehicle-arc-container {
+    position: relative;
+    width: 260px;
+    height: 140px; /* shallow arc */
+    margin-top: 30px;
+    overflow: visible;
+}
+
+.vehicle-arc-item {
+    position: absolute;
+    width: 55px;
+    opacity: 0.35; /* default low opacity for side vehicles */
+    transition: opacity 0.4s ease-in-out;
+    transform-origin: center;
+    animation: arcMove 6s infinite ease-in-out;
+    animation-fill-mode: backwards;  /* <-- THIS FIXES THE STACK ISSUE */
+}
+
+/* TOP position gets full opacity automatically via keyframe */
+@keyframes arcMove {
+    0%   { transform: translate(-50px, 60px); opacity: 0; }
+    12%  { transform: translate(20px, 20px); opacity: 0.4; }
+    24%  { transform: translate(90px, -10px); opacity: 1; }
+    36%  { transform: translate(160px, 20px); opacity: 0.4; }
+    48%  { transform: translate(230px, 60px); opacity: 0; }
+    100% { transform: translate(-50px, 60px); opacity: 0; }
+}
+
+
+
     </style>
 
+    <!-- Redirect Script (UNCHANGED) -->
     <script>
         setTimeout(function() {
-window.location.href = "/driver-assigned?pickup=[[${pickup}]]&drop=[[${drop}]]&vehicle=[[${vehicle}]]";
- }, 3000);
-
+            window.location.href = "/driver-assigned?pickup=[[${pickup}]]&drop=[[${drop}]]&vehicle=[[${vehicle}]]";
+        }, 5000);
     </script>
+
 </head>
 <body>
 
-<div class="loader"></div>
+<!-- Ripple Animation -->
+<div class="ripple"></div>
+<div class="ripple"></div>
+<div class="ripple"></div>
+
+<!-- Semi-circle rotating vehicle icons -->
+<div class="vehicle-arc-container">
+
+    <!-- AUTO -->
+    <img src="https://cdn-icons-png.flaticon.com/128/706/706236.png"
+         class="vehicle-arc-item" style="animation-delay: -0.1s;">
+
+    <!-- MINI -->
+    <img src="https://cdn-icons-png.flaticon.com/512/741/741407.png"
+         class="vehicle-arc-item" style="animation-delay: 1.4s;">
+
+    <!-- SEDAN -->
+    <img src="https://cdn-icons-png.flaticon.com/128/14703/14703755.png"
+         class="vehicle-arc-item" style="animation-delay: 2.9s;">
+
+    <!-- SUV -->
+    <img src="https://cdn-icons-png.flaticon.com/128/6141/6141605.png"
+         class="vehicle-arc-item" style="animation-delay: 4.4s;">
+</div>
+
+
 <h2>Looking for nearby drivers...</h2>
 
 </body>

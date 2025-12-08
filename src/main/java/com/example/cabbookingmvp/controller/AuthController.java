@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class AuthController {
 
@@ -22,10 +24,10 @@ public class AuthController {
     public String registerPage() {
         return "register";
     }
-    @GetMapping("/home")
-    public String homePage() {
-        return "home";
-    }
+//    @GetMapping("/home")
+//    public String homePage() {
+//        return "home";
+//    }
 
     @PostMapping("/register")
     public String registerUser(@RequestParam String name,
@@ -46,7 +48,8 @@ public class AuthController {
     @PostMapping("/login")
     public String loginUser(@RequestParam String email,
                             @RequestParam String password,
-                            Model model) {
+                            Model model,
+                            HttpSession session) {
 
         User user = userRepo.findByEmail(email);
 
@@ -54,6 +57,7 @@ public class AuthController {
             model.addAttribute("error", "Invalid credentials");
             return "login";
         }
+        session.setAttribute("email", user.getEmail());
 
         // redirect to booking page
         return "redirect:/home";

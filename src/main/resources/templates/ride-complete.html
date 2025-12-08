@@ -1,17 +1,182 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Ride Summary</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h2>Ride Completed!</h2>-->
+
+<!--<p><b>Distance:</b> <span th:text="${distance}"></span> km</p>-->
+<!--<p><b>Total Fare:</b> ₹<span th:text="${fare}"></span></p>-->
+<!--<p><b>Driver:</b> <span th:text="${driver}"></span></p>-->
+
+<!--<a href="/home">Book Another Ride</a>-->
+
+<!--</body>-->
+<!--</html>-->
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Ride Summary</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Inter", sans-serif;
+            background: #F8FAFC;
+            color: #1F2A37;
+            animation: fadeIn 0.7s ease-in-out;
+        }
+
+        /* Fade animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            padding: 35px;
+            text-align: center;
+            color: white;
+            font-size: 26px;
+            font-weight: 600;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        /* Summary card */
+        .summary-card {
+            width: 60%;
+            margin: 30px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            animation: popIn 0.5s ease-out;
+        }
+
+        /* Pop animation for the card */
+        @keyframes popIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .row {
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .label {
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        .value {
+            font-weight: 700;
+        }
+
+        /* Book button */
+        .book-btn {
+            display: block;
+            text-decoration: none;
+            width: 60%;
+            margin: 25px auto;
+            padding: 14px;
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            color: white;
+            text-align: center;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            transition: 0.2s ease;
+        }
+
+        .book-btn:hover {
+            opacity: 0.92;
+        }
+
+    </style>
 </head>
+
 <body>
 
-<h2>Ride Completed!</h2>
+<!-- HEADER -->
+<div class="header">
+    Ride Completed!
+</div>
 
-<p><b>Distance:</b> <span th:text="${distance}"></span> km</p>
-<p><b>Total Fare:</b> ₹<span th:text="${fare}"></span></p>
-<p><b>Driver:</b> <span th:text="${driver}"></span></p>
+<!-- SUMMARY CARD -->
+<div class="summary-card">
 
-<a href="/home">Book Another Ride</a>
+    <div class="row">
+        <img src="https://cdn-icons-png.flaticon.com/128/684/684908.png" width="26">
+        <span class="label">Distance:</span>
+        <span class="value" th:text="${distance}"></span> km
+    </div>
+
+    <div class="row">
+        <img src="https://cdn-icons-png.flaticon.com/128/594/594822.png" width="26">
+        <span class="label">Total Fare:</span>
+        ₹<span class="value" th:text="${fare}"></span>
+    </div>
+
+    <div class="row">
+        <img src="https://cdn-icons-png.flaticon.com/128/1077/1077063.png" width="26">
+        <span class="label">Driver:</span>
+        <span class="value" th:text="${driver}"></span>
+    </div>
+
+</div>
+
+<!-- BOOK ANOTHER RIDE -->
+<a href="/home" class="book-btn">Book Another Ride</a>
+<script>
+    // Simple confetti burst effect
+    function launchConfetti() {
+        const duration = 1500;
+        const animationEnd = Date.now() + duration;
+
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+        function randomInRange(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        const interval = setInterval(function() {
+            const timeLeft = animationEnd - Date.now();
+
+            if (timeLeft <= 0) {
+                return clearInterval(interval);
+            }
+
+            const particleCount = 50 * (timeLeft / duration);
+
+            confetti({
+                ...defaults,
+                particleCount,
+                origin: {
+                    x: randomInRange(0.2, 0.8),
+                    y: Math.random() - 0.2
+                }
+            });
+        }, 250);
+    }
+
+    // Load canvas-confetti library dynamically
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js";
+    script.onload = launchConfetti;
+    document.body.appendChild(script);
+</script>
 
 </body>
 </html>

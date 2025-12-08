@@ -1,25 +1,246 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Driver Assigned</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h2>Driver Found!</h2>-->
+
+<!--<p><b>Name:</b> <span th:text="${driverName}"></span></p>-->
+<!--<p><b>Vehicle:</b> <span th:text="${vehicleModel}"></span></p>-->
+<!--<p><b>Number:</b> <span th:text="${vehicleNumber}"></span></p>-->
+<!--<p><b>Rating:</b> <span th:text="${rating}"></span> ⭐</p>-->
+
+<!--<form action="/startRide" method="get">-->
+<!--    <input type="hidden" name="pickup" th:value="${pickup}">-->
+<!--    <input type="hidden" name="drop" th:value="${drop}">-->
+<!--    <input type="hidden" name="vehicle" th:value="${vehicle}">-->
+<!--    <button type="submit">Start Ride</button>-->
+<!--</form>-->
+
+
+
+<!--</body>-->
+<!--</html>-->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Driver Assigned</title>
+    <meta charset="UTF-8">
+    <title>Driver Assigned </title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Inter", sans-serif;
+            background: #F8FAFC;
+            color: #1F2A37;
+        }
+
+        /* Header gradient */
+        .header {
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            padding: 35px;
+            text-align: center;
+            color: white;
+            font-size: 26px;
+            font-weight: 600;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        .eta {
+            margin-top: 10px;
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        /* Driver card */
+        .driver-card {
+            width: 60%;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        .driver-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .driver-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .driver-icon {
+            background: #10B8C7;
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            border-radius: 50%;
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rating {
+            font-size: 15px;
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .vehicle-card {
+            margin-top: 15px;
+            padding: 14px;
+            background: #F5F7FA;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .vehicle-card img {
+            width: 35px;
+        }
+
+        /* Pickup-Drop card */
+        .route-card {
+            width: 60%;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        .route-row {
+            margin-bottom: 18px;
+        }
+
+        .route-label {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        .route-value {
+            font-size: 17px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* Buttons */
+        .start-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            color: white;
+            margin-bottom: 20px;
+        }
+        .start-btn:hover { opacity: 0.92; }
+        .cancel-btn:hover {
+            background: #FFE5E5;
+        }
+        .button-wrapper {
+            width: 60%;
+            margin: 0 auto;
+        }
+
+        .cancel-btn-link {
+            display: block;
+            width: 100%;
+            padding: 14px; /* restored to match top button visually */
+            margin: 10px 0 25px 0;
+            border-radius: 16px;  /* <-- FIXED: larger radius */
+            border: 2px solid #DC2626;
+            color: #DC2626;
+            font-size: 17px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            background: white; /* <-- ensures curves are not clipped */
+            box-sizing: border-box;
+        }
+
+
+        .cancel-btn-link:hover {
+            background: #FFE5E5;
+        }
+    </style>
 </head>
 <body>
 
-<h2>Driver Found!</h2>
+<!-- HEADER -->
+<div class="header">
+    Driver Assigned
+    <div class="eta">Arriving in <b>3 min</b></div>
+</div>
 
-<p><b>Name:</b> <span th:text="${driverName}"></span></p>
-<p><b>Vehicle:</b> <span th:text="${vehicleModel}"></span></p>
-<p><b>Number:</b> <span th:text="${vehicleNumber}"></span></p>
-<p><b>Rating:</b> <span th:text="${rating}"></span> ⭐</p>
+<!-- DRIVER DETAILS CARD -->
+<div class="driver-card">
 
-<form action="/startRide" method="get">
-    <input type="hidden" name="pickup" th:value="${pickup}">
-    <input type="hidden" name="drop" th:value="${drop}">
-    <input type="hidden" name="vehicle" th:value="${vehicle}">
-    <button type="submit">Start Ride</button>
-</form>
+    <div class="driver-top">
+        <div class="driver-info">
+            <div class="driver-icon">
+                <span th:text="${driverName[0]}"></span>
 
+            </div>
 
+            <div>
+                <div style="font-size:18px; font-weight:600;" th:text="${driverName}"></div>
+                <div class="rating">
+                    ⭐ <span th:text="${rating}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="vehicle-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/741/741407.png">
+        <div>
+            <div style="font-size:16px; font-weight:600;" th:text="${vehicleModel}"></div>
+            <div style="font-size:14px; color:#6B7280;" th:text="${vehicleNumber}"></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- PICKUP & DROP CARD -->
+<div class="route-card">
+    <div class="route-row">
+        <div class="route-label">Pickup</div>
+        <div class="route-value" th:text="${pickup}"></div>
+    </div>
+
+    <div class="route-row">
+        <div class="route-label">Destination</div>
+        <div class="route-value" th:text="${drop}"></div>
+    </div>
+</div>
+<div class="button-wrapper">
+
+    <form action="/startRide" method="get">
+        <input type="hidden" name="pickup" th:value="${pickup}">
+        <input type="hidden" name="drop" th:value="${drop}">
+        <input type="hidden" name="vehicle" th:value="${vehicle}">
+        <input type="hidden" name="driver" th:value="${driverName}">
+        <button class="start-btn" type="submit">Start Trip</button>
+    </form>
+
+    <a href="/home" class="cancel-btn-link">Cancel Ride</a>
+
+</div>
 </body>
 </html>

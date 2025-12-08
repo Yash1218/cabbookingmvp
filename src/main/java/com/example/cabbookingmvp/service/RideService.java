@@ -17,7 +17,8 @@ public class RideService {
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        return R * c;
+        return Math.round((R * c) * 100.0) / 100.0;
+
     }
 
     public double calculateFare(double distance, String vehicle) {
@@ -28,6 +29,7 @@ public class RideService {
             case "SUV" -> 18;
             default -> 10;
         };
-        return distance * rate;
+        return Math.round(distance * rate * 100.0) / 100.0;
+
     }
 }

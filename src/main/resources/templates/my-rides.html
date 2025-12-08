@@ -1,34 +1,181 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>My Rides</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Inter", sans-serif;
+            background: #F3F7FA;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            padding: 35px;
+            text-align: center;
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            border-bottom-left-radius: 35px;
+            border-bottom-right-radius: 35px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        /* Ride list container */
+        .ride-list {
+            margin: 28px auto;
+            width: 70%;
+        }
+
+        /* Ride Card */
+        .ride-card {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.09);
+            margin-bottom: 20px;
+            border-left: 6px solid #10B8C7;
+            animation: slideUp 0.45s ease-out;
+            cursor: pointer;
+            transition: transform .15s ease;
+        }
+
+        .ride-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Pickup / Drop Row */
+        .location-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 17px;
+            color: #1F2A37;
+            align-items: center;
+        }
+
+        .location-row img {
+            width: 20px;
+            opacity: 0.8;
+        }
+
+        /* Distance + Driver */
+        .ride-meta {
+            margin-top: 6px;
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        /* Fare */
+        .fare {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0FA6D8;
+            text-align: right;
+        }
+
+        /* Time badge */
+        .time-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #E6F7FB;
+            padding: 6px 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 14px;
+            color: #0C8AA8;
+        }
+
+        .time-badge img {
+            width: 16px;
+        }
+
+        /* Back button */
+        .home-btn {
+            display: block;
+            width: 60%;
+            margin: 35px auto;
+            padding: 14px;
+            text-align: center;
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: 0.2s ease;
+        }
+
+        .home-btn:hover {
+            opacity: 0.92;
+        }
+
+    </style>
 </head>
+
 <body>
 
-<h2>My Rides</h2>
+<!-- HEADER -->
+<div class="header">My Rides</div>
 
-<table border="1" cellpadding="8" cellspacing="0">
-    <tr>
-        <th>Pickup</th>
-        <th>Drop</th>
-        <th>Distance (km)</th>
-        <th>Fare (₹)</th>
-        <th>Driver</th>
-        <th>Date & Time</th>
-    </tr>
+<!-- RIDE LIST -->
+<div class="ride-list">
 
-    <tr th:each="r : ${rides}">
-        <td th:text="${r.pickup}"></td>
-        <td th:text="${r.dropLocation}"></td>
-        <td th:text="${r.distance}"></td>
-        <td th:text="${r.fare}"></td>
-        <td th:text="${r.driverName}"></td>
-        <td th:text="${r.time}"></td>
-    </tr>
-</table>
+    <div class="ride-card" th:each="r : ${rides}">
 
-<br>
-<a href="/home">Back to Home</a>
+        <!-- Pickup + Drop -->
+        <div class="location-row">
+            <div style="display:flex; align-items:center; gap:6px;">
+                <img src="https://cdn-icons-png.flaticon.com/128/2555/2555013.png" style="width:20px; height:20px; object-fit:contain;">
+                <span th:text="${r.pickup}" style="font-weight:600;"></span>
+            </div>
+
+
+            <div style="display:flex; align-items:center; gap:6px;">
+                <img src="https://cdn-icons-png.flaticon.com/128/684/684908.png" style="width:20px; height:20px; object-fit:contain;">
+                <span th:text="${r.dropLocation}" style="font-weight:600;"></span>
+            </div>
+        </div>
+
+        <!-- Distance + Driver -->
+        <div class="ride-meta">
+            <span th:text="${r.distance}"></span> km • Driver:
+            <span th:text="${r.driverName}"></span>
+        </div>
+
+        <!-- Fare -->
+        <div class="fare">
+            ₹<span th:text="${r.fare}"></span>
+        </div>
+
+        <!-- Date / Time -->
+        <div class="time-badge">
+            <img src="https://cdn-icons-png.flaticon.com/128/1827/1827272.png">
+            <span th:text="${r.time}"></span>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- HOME BUTTON -->
+<a href="/home" class="home-btn">Back to Home</a>
 
 </body>
 </html>

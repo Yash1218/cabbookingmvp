@@ -1,5 +1,143 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Your Ride</title>-->
+
+<!--    &lt;!&ndash; Leaflet CSS &ndash;&gt;-->
+<!--    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />-->
+
+<!--    <style>-->
+<!--        #map {-->
+<!--            height: 500px;-->
+<!--            width: 100%;-->
+<!--            border: 1px solid #000;-->
+<!--            margin-top: 10px;-->
+<!--        }-->
+
+<!--        .ads-box {-->
+<!--            position: absolute;-->
+<!--            bottom: 20px;-->
+<!--            right: 20px;-->
+<!--            background: white;-->
+<!--            border: 1px solid #ccc;-->
+<!--            padding: 12px;-->
+<!--            border-radius: 8px;-->
+<!--            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);-->
+<!--            z-index: 999;-->
+<!--            .leaflet-control-attribution {-->
+<!--    display: none !important;-->
+<!--}-->
+
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h2>Your Ride</h2>-->
+
+<!--<p><b>Pickup:</b> <span th:text="${pickup}"></span></p>-->
+<!--<p><b>Drop:</b> <span th:text="${drop}"></span></p>-->
+
+<!--<div id="map"></div>-->
+
+<!--&lt;!&ndash; Floating ADS Suggestion &ndash;&gt;-->
+<!--<div class="ads-box">-->
+<!--    <h4>Nearby Suggestions</h4>-->
+<!--    <p>Food | Tourism | Shopping</p>-->
+<!--</div>-->
+<!--<form action="/finishRide" method="post">-->
+<!--    <input type="hidden" name="pickup" th:value="${pickup}">-->
+<!--    <input type="hidden" name="drop" th:value="${drop}">-->
+<!--    <input type="hidden" name="vehicle" th:value="${vehicle}">-->
+<!--    <button type="submit">Finish Ride</button>-->
+<!--</form>-->
+
+<!--&lt;!&ndash; Leaflet JS &ndash;&gt;-->
+<!--<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>-->
+
+<!--<script>-->
+<!--    var pickup = "[[${pickup}]]";-->
+<!--    var drop = "[[${drop}]]";-->
+
+<!--    var map = L.map('map').setView([18.5204, 73.8567], 12);-->
+
+<!--    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {-->
+<!--        maxZoom: 19,-->
+<!--    }).addTo(map);-->
+
+<!--    function geocode(location, callback) {-->
+<!--        fetch("https://nominatim.openstreetmap.org/search?format=json&q=" + location)-->
+<!--            .then(response => response.json())-->
+<!--            .then(data => {-->
+<!--                if (data.length > 0) {-->
+<!--                    callback([data[0].lat, data[0].lon]);-->
+<!--                }-->
+<!--            });-->
+<!--    }-->
+
+<!--    geocode(pickup, function(pickupCoords) {-->
+<!--        geocode(drop, function(dropCoords) {-->
+
+<!--            L.marker(pickupCoords).addTo(map).bindPopup("Pickup");-->
+<!--            L.marker(dropCoords).addTo(map).bindPopup("Drop");-->
+
+<!--            var group = new L.featureGroup([-->
+<!--                L.marker(pickupCoords),-->
+<!--                L.marker(dropCoords)-->
+<!--            ]);-->
+<!--            map.fitBounds(group.getBounds());-->
+
+<!--            L.polyline([pickupCoords, dropCoords], {color: 'blue'}).addTo(map);-->
+<!--        });-->
+<!--    });-->
+
+<!--    // -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; ADS SYSTEM -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+<!--    let ads = [];-->
+<!--    let currentIndex = 0;-->
+
+<!--    // Fetch ADS suggestions-->
+<!--    fetch("/ads/suggestions?city=Pune")-->
+<!--        .then(response => response.json())-->
+<!--        .then(data => {-->
+<!--            ads = data;-->
+<!--            showAd(0);-->
+<!--            setInterval(showNextAd, 3000); // Rotate every 3 seconds-->
+<!--        });-->
+
+<!--    function showAd(index) {-->
+<!--        let adsBox = document.querySelector(".ads-box");-->
+<!--        adsBox.innerHTML = ""; // Clear previous ad-->
+
+<!--        if (ads.length === 0) {-->
+<!--            adsBox.innerHTML = "<p>No suggestions available</p>";-->
+<!--            return;-->
+<!--        }-->
+
+<!--        let poi = ads[index];-->
+<!--        adsBox.innerHTML = `-->
+<!--            <div style="-->
+<!--                border: 1px solid #ccc;-->
+<!--                padding: 10px;-->
+<!--                border-radius: 10px;-->
+<!--                background: white;-->
+<!--            ">-->
+<!--                <b>${poi.name}</b><br>-->
+<!--                <small>${poi.category}</small><br>-->
+<!--                <span style="font-size: 12px;">${poi.description}</span>-->
+<!--            </div>-->
+<!--        `;-->
+<!--    }-->
+
+<!--    function showNextAd() {-->
+<!--        currentIndex = (currentIndex + 1) % ads.length;-->
+<!--        showAd(currentIndex);-->
+<!--    }-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Your Ride</title>
 
@@ -7,48 +145,130 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
     <style>
+
+        body {
+            margin: 0;
+            font-family: "Inter", sans-serif;
+            background: #F3F7FA;
+            color: #1F2A37;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            padding: 30px;
+            color: white;
+            font-size: 26px;
+            font-weight: 700;
+            text-align: center;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* RIDE INFO CARD */
+        .ride-info {
+            width: 90%;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+
+        .ride-info p {
+            margin: 6px 0;
+            font-size: 17px;
+        }
+
+        /* MAP */
         #map {
-            height: 500px;
-            width: 100%;
-            border: 1px solid #000;
-            margin-top: 10px;
+            height: 380px;
+            width: 90%;
+            margin: 10px auto 140px auto; /* extra space so button & ads never hide */
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
         }
 
+        /* Floating ADS CARD */
         .ads-box {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
+            position: fixed;
+            top: 140px;
+            right: 25px;
             background: white;
-            border: 1px solid #ccc;
-            padding: 12px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
-            z-index: 999;
-            .leaflet-control-attribution {
-    display: none !important;
-}
-
+            padding: 18px;
+            width: 250px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            z-index: 9999;
+            animation: floatAd 3s infinite ease-in-out;
         }
+
+        @keyframes floatAd {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* FINISH BUTTON */
+        button {
+            width: 90%;
+            display: block;
+            margin: 20px auto 40px auto;
+            padding: 14px;
+            background: linear-gradient(135deg, #10B8C7, #0FA6D8);
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 5px 14px rgba(16, 184, 199, 0.35);
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            opacity: 0.95;
+        }
+
+        /* Hide Leaflet watermark */
+        .leaflet-control-attribution {
+            display: none !important;
+        }
+
     </style>
 </head>
+
 <body>
 
-<h2>Your Ride</h2>
+<!-- HEADER -->
+<div class="header">Your Ride</div>
 
-<p><b>Pickup:</b> <span th:text="${pickup}"></span></p>
-<p><b>Drop:</b> <span th:text="${drop}"></span></p>
+<!-- RIDE INFO -->
+<div class="ride-info">
+    <p><b>Pickup:</b> <span th:text="${pickup}"></span></p>
+    <p><b>Drop:</b> <span th:text="${drop}"></span></p>
+</div>
 
+<!-- MAP -->
 <div id="map"></div>
 
 <!-- Floating ADS Suggestion -->
 <div class="ads-box">
-    <h4>Nearby Suggestions</h4>
-    <p>Food | Tourism | Shopping</p>
+    <h4 style="margin:0; font-size:18px; color:#0FA6D8;">Nearby Suggestions</h4>
+    <p style="margin:5px 0 0 0; color:#555;">Food • Tourism • Shopping</p>
 </div>
+
+<!-- FINISH RIDE BUTTON -->
 <form action="/finishRide" method="post">
     <input type="hidden" name="pickup" th:value="${pickup}">
     <input type="hidden" name="drop" th:value="${drop}">
     <input type="hidden" name="vehicle" th:value="${vehicle}">
+    <input type="hidden" name="driver" th:value="${driver}">
     <button type="submit">Finish Ride</button>
 </form>
 
@@ -56,6 +276,15 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
+    // Car icon
+    var carIcon = L.icon({
+        iconUrl: "https://cdn-icons-png.flaticon.com/512/744/744465.png",
+        iconSize: [40, 40],
+        iconAnchor: [20, 20]
+    });
+
+    /* --- LOGIC UNTOUCHED --- */
+
     var pickup = "[[${pickup}]]";
     var drop = "[[${drop}]]";
 
@@ -85,28 +314,55 @@
                 L.marker(pickupCoords),
                 L.marker(dropCoords)
             ]);
-            map.fitBounds(group.getBounds());
 
+            map.fitBounds(group.getBounds());
             L.polyline([pickupCoords, dropCoords], {color: 'blue'}).addTo(map);
+            // --------- ANIMATED CAR MOVEMENT ---------
+
+            let carMarker = L.marker(pickupCoords, { icon: carIcon }).addTo(map);
+
+            function animateCar(route) {
+                let index = 0;
+                let speed = 0.0015; // lower is slower, increase for faster movement
+
+                function move() {
+                    if (index < 1) {
+                        index += speed;
+
+                        // interpolate car position
+                        let lat = pickupCoords[0] + (dropCoords[0] - pickupCoords[0]) * index;
+                        let lon = pickupCoords[1] + (dropCoords[1] - pickupCoords[1]) * index;
+
+                        carMarker.setLatLng([lat, lon]);
+
+                        requestAnimationFrame(move);
+                    }
+                }
+
+                move();
+            }
+
+            // Start car animation
+            animateCar();
+
         });
     });
 
-    // --------------------- ADS SYSTEM ---------------------
+    /* ADS SYSTEM (UNCHANGED LOGIC) */
     let ads = [];
     let currentIndex = 0;
 
-    // Fetch ADS suggestions
     fetch("/ads/suggestions?city=Pune")
         .then(response => response.json())
         .then(data => {
             ads = data;
             showAd(0);
-            setInterval(showNextAd, 3000); // Rotate every 3 seconds
+            setInterval(showNextAd, 3000);
         });
 
     function showAd(index) {
         let adsBox = document.querySelector(".ads-box");
-        adsBox.innerHTML = ""; // Clear previous ad
+        adsBox.innerHTML = "";
 
         if (ads.length === 0) {
             adsBox.innerHTML = "<p>No suggestions available</p>";
@@ -114,16 +370,12 @@
         }
 
         let poi = ads[index];
+
         adsBox.innerHTML = `
-            <div style="
-                border: 1px solid #ccc;
-                padding: 10px;
-                border-radius: 10px;
-                background: white;
-            ">
-                <b>${poi.name}</b><br>
+            <div>
+                <b style="color:#0FA6D8;">${poi.name}</b><br>
                 <small>${poi.category}</small><br>
-                <span style="font-size: 12px;">${poi.description}</span>
+                <span style="font-size: 13px; color:#555;">${poi.description}</span>
             </div>
         `;
     }
@@ -132,6 +384,7 @@
         currentIndex = (currentIndex + 1) % ads.length;
         showAd(currentIndex);
     }
+
 </script>
 
 </body>
