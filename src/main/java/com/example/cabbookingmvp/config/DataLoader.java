@@ -18,9 +18,10 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (driverRepository.count() == 0) {
-            driverRepository.save(new Driver("Ramesh Pawar", "WagonR", "MH12 AB 3456", 4.8));
-            driverRepository.save(new Driver("Anil Patil", "Swift", "MH12 XY 9876", 4.6));
-            driverRepository.save(new Driver("Sunil Mane", "Alto", "MH12 CD 1122", 4.7));
+            driverRepository.save(new Driver("Ramesh Pawar", "WagonR", "MH12 AB 3456", 4.8, "Mini"));
+            driverRepository.save(new Driver("Anil Patil", "Swift", "MH12 XY 9876", 4.6, "Mini"));
+            driverRepository.save(new Driver("Sunil Mane", "Alto", "MH12 CD 1122", 4.7, "Auto"));
+
         }
     }
 }

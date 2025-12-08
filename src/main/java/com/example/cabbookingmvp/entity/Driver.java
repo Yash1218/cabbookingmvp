@@ -14,14 +14,17 @@ public class Driver {
     private String vehicleModel;
     private String vehicleNumber;
     private double rating;
+    private String vehicleType;
+
 
     public Driver() {}
 
-    public Driver(String name, String vehicleModel, String vehicleNumber, double rating) {
+    public Driver(String name, String vehicleModel, String vehicleNumber, double rating, String vehicleType) {
         this.name = name;
         this.vehicleModel = vehicleModel;
         this.vehicleNumber = vehicleNumber;
         this.rating = rating;
+        this.vehicleType = vehicleType;
     }
 
     public Long getId() {
@@ -59,4 +62,12 @@ public class Driver {
     public void setRating(double rating) {
         this.rating = rating;
     }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
 }

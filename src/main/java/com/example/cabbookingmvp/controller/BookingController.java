@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 
 import com.example.cabbookingmvp.service.GeoService;
 
@@ -73,8 +74,9 @@ public class BookingController {
                                  @RequestParam String vehicle,
                                  Model model) {
 
-        var drivers = driverRepository.findAll();
-        var driver = drivers.get((int) (Math.random() * drivers.size()));
+        var drivers = driverRepository.findByVehicleTypeIgnoreCase(vehicle);
+        var driver = drivers.get(new Random().nextInt(drivers.size()));
+
 
         model.addAttribute("pickup", pickup);
         model.addAttribute("drop", drop);

@@ -208,7 +208,14 @@
     </div>
 
     <div class="vehicle-card">
-        <img src="https://cdn-icons-png.flaticon.com/512/741/741407.png">
+        <img th:src="${
+            vehicle == 'Auto' ? 'https://cdn-icons-png.flaticon.com/128/706/706236.png' :
+            vehicle == 'Mini' ? 'https://cdn-icons-png.flaticon.com/512/741/741407.png' :
+            vehicle == 'Sedan' ? 'https://cdn-icons-png.flaticon.com/128/14703/14703755.png' :
+            vehicle == 'SUV' ? 'https://cdn-icons-png.flaticon.com/128/6141/6141605.png' :
+            'https://cdn-icons-png.flaticon.com/128/854/854894.png'
+        }" style="width:50px;">
+
         <div>
             <div style="font-size:16px; font-weight:600;" th:text="${vehicleModel}"></div>
             <div style="font-size:14px; color:#6B7280;" th:text="${vehicleNumber}"></div>
